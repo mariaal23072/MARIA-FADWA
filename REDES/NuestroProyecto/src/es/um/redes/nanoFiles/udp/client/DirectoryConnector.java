@@ -1,6 +1,6 @@
 package es.um.redes.nanoFiles.udp.client;
 
-import java.io.IOException;
+import java.io.IOException;	
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
@@ -16,7 +16,7 @@ import es.um.redes.nanoFiles.udp.message.DirMessage;
 import es.um.redes.nanoFiles.udp.message.DirMessageOps;
 import es.um.redes.nanoFiles.util.FileInfo;
 
-/**
+/**		HOLAAAAA
  * Cliente con métodos de consulta y actualización específicos del directorio
  */
 public class DirectoryConnector {
