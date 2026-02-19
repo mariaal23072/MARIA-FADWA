@@ -88,11 +88,15 @@ public class NFDirectoryServer {
 			/*
 			 * TODO: (Boletín SocketsUDP) Crear un búfer para recibir datagramas y un
 			 * datagrama asociado al búfer (datagramReceivedFromClient)
-			 */
+			 */ //HECHO
+			
+			byte recvBuf[] = new byte[DirMessage.PACKET_MAX_SIZE];
+			datagramReceivedFromClient = new DatagramPacket(recvBuf, recvBuf.length);
 			/*
 			 * TODO: (Boletín SocketsUDP) Recibimos a través del socket un datagrama
-			 */
+			 */ //HECHO
 
+			socket.receive(datagramReceivedFromClient);
 
 
 			if (datagramReceivedFromClient == null) {
@@ -120,12 +124,12 @@ public class NFDirectoryServer {
 		System.out.println("[testMode] Directory starting...");
 
 		System.out.println("[testMode] Attempting to receive 'ping' message...");
-		DatagramPacket rcvDatagram = receiveDatagram();
-		sendResponseTestMode(rcvDatagram);
+		DatagramPacket rcvDatagram = receiveDatagram(); // Escucha lo que viene por el puerto y devuelve el datagrama recibido
+		sendResponseTestMode(rcvDatagram); // Procesa el datagrama recibido y envía la respuesta adecuada (pingok o invalid)
 
 		System.out.println("[testMode] Attempting to receive 'ping&PROTOCOL_ID' message...");
-		rcvDatagram = receiveDatagram();
-		sendResponseTestMode(rcvDatagram);
+		rcvDatagram = receiveDatagram(); // Escucha lo que viene por el puerto y devuelve el datagrama recibido
+		sendResponseTestMode(rcvDatagram); // Procesa el datagrama recibido y envía la respuesta adecuada (welcome o denied)
 	}
 
 	private void sendResponseTestMode(DatagramPacket pkt) throws IOException {
@@ -152,9 +156,10 @@ public class NFDirectoryServer {
 		 * en cuyo caso se responderá con "welcome" (en otro caso, "denied").
 		 */
 
-		String messageFromClient = new String(pkt.getData(), 0, pkt.getLength());
-		System.out.println("Data received: " + messageFromClient);
-
+		/**InetSocketAddress clientAddr = (InetSocketAddress) pkt.getSocketAddress();
+		String messageToClient;
+		if (receivedMessage.eq)
+			**/
 
 
 	}

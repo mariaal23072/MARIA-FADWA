@@ -10,8 +10,8 @@ public class NanoFiles {
 	/**
 	 * Identificador único para cada grupo de prácticas. TODO: Establecer a un valor
 	 * que combine los DNIs de ambos miembros del grupo de prácticas.
-	 */
-	public static final String PROTOCOL_ID = "123456789A";
+	 */ // HECHO
+	public static final String PROTOCOL_ID = "34333084H";
 	private static final String DEFAULT_DIRECTORY_HOSTNAME = "localhost";
 	public static String sharedDirname = DEFAULT_SHARED_DIRNAME;
 	public static FileDatabase db;
@@ -19,7 +19,7 @@ public class NanoFiles {
 	 * Flag para pruebas iniciales con UDP, desactivado una vez que la comunicación
 	 * cliente-directorio está implementada y probada.
 	 */
-	public static boolean testModeUDP = true;
+	public static boolean testModeUDP = true; // HAY QUE PONERLO A FALSE UNA VEZ QUE SE HAYA PROBADO LA COMUNICACIÓN UDP CON EL DIRECTORIO
 	/**
 	 * Flag para pruebas iniciales con TCP, desactivado una vez que la comunicación
 	 * cliente-servidor de ficheros está implementada y probada.

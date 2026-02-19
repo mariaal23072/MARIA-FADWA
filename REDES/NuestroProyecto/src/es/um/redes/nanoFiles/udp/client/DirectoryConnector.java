@@ -7,6 +7,7 @@ import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.SocketTimeoutException;
 import java.util.Map;
+import java.util.Arrays;
 import java.util.LinkedHashMap;
 import es.um.redes.nanoFiles.tcp.client.NFConnector;
 
@@ -75,13 +76,16 @@ public class DirectoryConnector {
 		 * guardar la dirección de socket (address:DIRECTORY_PORT) del directorio en el
 		 * atributo directoryAddress, para poder enviar datagramas a dicho destino.
 		 */
+		
+		InetAddress serverIP = InetAddress.getByName(directoryHostname);
+		directoryAddress = new InetSocketAddress(serverIP, DIRECTORY_PORT);
+		
 		/*
 		 * TODO: (Boletín SocketsUDP) Crea el socket UDP en cualquier puerto para enviar
 		 * datagramas al directorio
 		 */
-
-
-
+		
+		socket = new DatagramSocket();
 	}
 
 	/**
@@ -129,8 +133,23 @@ public class DirectoryConnector {
 		 * NOTA: Las excepciones deben tratarse de la más concreta a la más genérica.
 		 * SocketTimeoutException es más concreta que IOException.
 		 */
-
-
+		
+		DatagramPacket packetToServer = new DatagramPacket(requestData, requestData.length, this.directoryAddress);
+		try {
+			socket.send(packetToServer);
+		} catch (IOException e) {
+			System.err.println("IOException when sending DatagramPacket.");
+			System.exit(-1);
+		}
+		
+		DatagramPacket packetFromServer = new DatagramPacket(responseData, responseData.length);
+		try {
+			socket.receive(packetFromServer);
+		} catch (IOException e) {
+			System.err.println("IOException when receiving DatagramPacket.");
+			System.exit(-1);
+		}
+		response = Arrays.copyOf(responseData, packetFromServer.getLength());
 
 		if (response != null && response.length == responseData.length) {
 			System.err.println("Your response is as large as the datagram reception buffer!!\n"
@@ -153,8 +172,24 @@ public class DirectoryConnector {
 		 * devuelve verdadero, falso si la respuesta no contiene los datos esperados.
 		 */
 		boolean success = false;
-
-
+		
+		// Convertimos el mensaje a bytes para enviarlo al directorio
+		String message = "ping";
+		byte[] requestData = message.getBytes();
+		
+		// Enviamos y recibimos usando el método sendAndReceiveDatagrams
+		byte[] responseData = sendAndReceiveDatagrams(requestData);
+		
+		// Convertimos la respuesta a string para procesarla
+		if (responseData == null) {
+			return false;
+		}
+		String responseMessage = new String(responseData);
+		
+		// Comprobamos si la respuesta recibida empieza por "pingok"
+		if (responseMessage.equals("pingok")) {
+			success = true;
+		}
 
 		return success;
 	}
@@ -182,12 +217,21 @@ public class DirectoryConnector {
 		 * recibir una respuesta (sendAndReceiveDatagrams). : 5. Comprobar si la cadena
 		 * recibida en el datagrama de respuesta es "welcome", imprimir si éxito o
 		 * fracaso. 6.Devolver éxito/fracaso de la operación.
-		 */
-
-
+		 */ // HECHO
+				
+		byte[] requestData = new String("ping").getBytes();
+		byte[] response = sendAndReceiveDatagrams(requestData);
+		if (response != null) {
+			String receivedMessage = new String(response, 0, response.length);
+			System.out.println("Receiving... " + receivedMessage);
+			if (receivedMessage.equals("welcome")) {
+				success = true;
+			}
+		}
 
 		return success;
 	}
+
 
 	/**
 	 * Método para "hacer ping" al directorio, comprobar que está operativo y que es
