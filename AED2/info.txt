@@ -1,0 +1,9 @@
+Para hacer esta práctica con éxito, solo necesitas entender estos cuatro conceptos clave:
+1. Bucles y Cadenas (Versión Iterativa): Cómo usar bucles para recorrer el texto letra 
+por letra y llevar la cuenta de cuáles están en orden.
+2. Divide y Vencerás (DyV): Partir la cadena en dos mitades, buscar en cada mitad de forma 
+independiente y, lo más importante, comprobar qué ocurre justo en la unión de ambas (la zona de "cruce").
+3. Análisis Teórico de la Eficiencia (Tema 1): Saber contar operaciones básicas para determinar el coste 
+(la Notación O) de tu código iterativo, y usar ecuaciones de recurrencia para calcular el del algoritmo DyV.
+4. Análisis Experimental y Regresión: Medir el tiempo en milisegundos que tarda tu código en VS Code al
+aumentar el tamaño de los textos, y pasar esos datos a GeoGebra para hacer gráficas y ver si coinciden con la teoría.
