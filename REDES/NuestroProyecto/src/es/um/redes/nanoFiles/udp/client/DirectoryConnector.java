@@ -32,7 +32,7 @@ public class DirectoryConnector {
 	private static final int TIMEOUT = 1000;
 	/**
 	 * Número de intentos máximos para obtener del directorio una respuesta a una
-	 * solicitud enviada. Cada vez que expira el timeout sin recibir respuesta se
+	 * solicitud enviada. Cada vez que expira el timeout sin recibir respuesta se️
 	 * cuenta como un intento.
 	 */
 	private static final int MAX_NUMBER_OF_ATTEMPTS = 5;
