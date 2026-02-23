@@ -1,3 +1,26 @@
+ENUNCIADO:
+(3) Dada una cadena A de longitud n, y un natural m <= n, encontrar la subcadena B de m caracteres con más caracteres
+consecutivos ordenados ascendentemente (incluyendo caracteres iguales). Llamenos C a la subcadena de B formada por 
+dichos caracteres. Devolver como solución el índice p de comienzo B y el número de caracteres en C. En caso de empate,
+será válida cualquiera de las soluciones óptimas.
+Ejemplo: n=10, m=5
+A= c d d a b c d a c c
+Solución: B, posición de inicio igual a 4, y número de caracteres en C igual a 4 (a b c d).
+
+ALFABETO para todos los problemas: abcdefghijklmnopqrstuvwxyz
+
+( Puedes asumir m constante, por ejemplo m=100, pero el programa debe funcionar para cualquier m.)
+
+
+RESUMEN:
+En esta práctica vas a desarrollar en C++ dos algoritmos (uno básico iterativo y otro usando Divide y Vencerás)
+para encontrar dentro de un texto una subcadena de tamaño concreto que tenga la mayor cantidad de letras seguidas
+en orden alfabético. Tu trabajo consistirá en programar ambas soluciones, comprobar que dan los mismos resultados
+para asegurarte de que no hay errores, y luego analizar matemáticamente y empíricamente cuánto tardan en ejecutarse.
+Todo este proceso, incluyendo las gráficas en GeoGebra donde compararás la teoría con los tiempos reales que mida tu
+ordenador, deberás redactarlo y documentarlo en una memoria.
+
+
 Para hacer esta práctica con éxito, solo necesitas entender estos cuatro conceptos clave:
 1. Bucles y Cadenas (Versión Iterativa): Cómo usar bucles para recorrer el texto letra 
 por letra y llevar la cuenta de cuáles están en orden.
@@ -7,3 +30,11 @@ independiente y, lo más importante, comprobar qué ocurre justo en la unión de
 (la Notación O) de tu código iterativo, y usar ecuaciones de recurrencia para calcular el del algoritmo DyV.
 4. Análisis Experimental y Regresión: Medir el tiempo en milisegundos que tarda tu código en VS Code al
 aumentar el tamaño de los textos, y pasar esos datos a GeoGebra para hacer gráficas y ver si coinciden con la teoría.
+
+FICHEROS TOTALES:
+1. dyv.h y dyv.cpp: Aquí escribiremos el código de tus algoritmos (el básico iterativo y el de Divide y Vencerás).
+2. tests_unitarios.cpp y tests_oraculo.cpp: Nos servirán para comprobar con ejemplos concretos y aleatorios que tu 
+código funciona correctamente y no tiene errores.
+3. tiempos.cpp: Lo usaremos para medir cuánto tardan tus algoritmos y generar un archivo de datos (CSV).
+4. makefile: Un archivo que le dirá al ordenador cómo compilar todo tu proyecto de golpe.
+

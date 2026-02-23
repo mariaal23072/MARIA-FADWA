@@ -1,0 +1,20 @@
+(1):
+n = 10
+m = 5
+A[n] = {c, d, d, a, b, c, d, a, c, c}
+
+Solucioón:
+B[m] = {a, b, c, d, a}
+p = 4
+C[p] =  {a, b, c, d}
+
+
+(2):
+n = 8
+m = 5
+A[n] = {b, z, a, c, f, n, a, b}
+
+Solucioón:
+B[m] = {z, a, c, f, n}
+p = 4
+C[p] =  {a, c, f, n}
