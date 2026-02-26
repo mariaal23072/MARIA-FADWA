@@ -3,22 +3,19 @@ ejemplo[n] = {c, d, d, a, b, c, d, a, c, c}
 m = 5
 n = 10
 
-Hacer un array:
-alfabeto[] = {a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s, t, u, v, w, x, y, z}
-e ir comparando con un bucle cada letra de la subcadena del array que nos dan para ver si coincide con la del array alfabeto,
-y así ir contando el número de caracteres seguidos en orden alfabético. Si la letra coincide con la siguiente letra 
-del alfabeto, aumentamos el contador. Si no, lo reiniciamos a 1 (porque la letra actual también cuenta como un nuevo 
-inicio de secuencia). Al final, devolvemos el índice de inicio de la subcadena (B) y el número máximo de caracteres seguidos encontrados.
-Hay que encontrar la subcadena de tamaño m que tenga el mayor número de caracteres seguidos en orden alfabético. Para eso, 
-podemos usar un bucle para recorrer todas las subcadenas de tamaño m dentro de la cadena A, y para cada una de ellas, contar cuántos caracteres
-seguidos en orden alfabético tiene. Guardamos el máximo encontrado y su posición, y al final devolvemos esa información.
-
 B[m] = {a, b, c, d, a} --> subcadena con más caracteres consecutivos ordenados ascendentemente (incluyendo caracteres iguales).
 C[] =  {a, b, c, d} --> la subcadena de B formada por dichos caracteres que están en orden alfabético consecutivo.
 p = 4 --> índice de comienzo de B (empezando desde 1)
 
 En resumen:
-1. Recorrer todas las subcadenas de tamaño m dentro de A.
-2. Para cada subcadena, contar cuántos caracteres seguidos en orden alfabético tiene.
-3. Guardar el máximo encontrado y su posición.
-4. Devolver el índice de inicio de la subcadena (B) y el número máximo de caracteres seguidos encontrados (longitud de C).
+1. Bucle principal: Recorres tu texto para elegir el inicio de cada bloque de m letras.
+2. Variables de control: Para cada bloque, creas un contador para la racha actual (que empieza en 1).
+3. Bucle secundario: Recorres las m letras de ese bloque. Si la letra actual es mayor o igual que la anterior (cadena[j] >= cadena[j-1]),
+le sumas 1 al contador. Si es menor (se rompe el orden), reinicias el contador de la racha.
+4. Guardar el mejor: Llevas el registro del contador más alto que hayas encontrado y la posición donde empezó ese bloque.
+
+¿Cuántas cadenas longitud m se hacen? n-m+1.
+
+int cont: vaya contando la racha actual de caracteres ordenados.
+int maxCont: vaya guardando la racha más larga que hayas encontrado.
+int p: vaya guardando la posición de inicio de la mejor racha.

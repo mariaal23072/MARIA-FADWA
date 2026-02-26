@@ -6,7 +6,7 @@ A[n] = {c, d, d, a, b, c, d, a, c, c}
 Solucioón:
 B[m] = {a, b, c, d, a}
 p = 4
-C[p] = {a, b, c, d}
+C[] = {a, b, c, d}
 
 
 (2):
@@ -16,8 +16,8 @@ A[n] = {b, z, a, c, f, n, a, b}
 
 Solucioón:
 B[m] = {z, a, c, f, n}
-p = 4
-C[p] = {a, c, f, n}
+p = 2
+C[] = {a, c, f, n}
 
 (3):
 n = 15
@@ -26,5 +26,5 @@ A[n] = {p, o, i, u, y, t, b, e, h, n, r, x, a, s, d}
 
 Solucioón:
 B[m] = {b, e, h, n, r, x, a}
-p = 6
-C[p] = {b, e, h, n, r, x}
+p = 1
+C[] = {b, e, h, n, r, x}

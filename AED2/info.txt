@@ -38,3 +38,11 @@ código funciona correctamente y no tiene errores.
 3. tiempos.cpp: Lo usaremos para medir cuánto tardan tus algoritmos y generar un archivo de datos (CSV).
 4. makefile: Un archivo que le dirá al ordenador cómo compilar todo tu proyecto de golpe.
 
+
+ALGORITMO ITERATIVO:
+Resuelve el problema avanzando paso a paso usando bucles (como for o while) para recorrer todos los datos de principio a fin.
+Es el enfoque más directo o de "fuerza bruta", que en tu caso comprobará cada posible subcadena una por una.
+
+DIVIDE Y VENCERÁS:
+(DyV), en cambio, divide tu array original en dos mitades más pequeñas, se llama a sí mismo para buscar la mejor subcadena 
+en cada mitad, y finalmente "combina" los resultados de ambas partes para dar la solución total
