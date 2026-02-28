@@ -19,7 +19,7 @@ public class NanoFiles {
 	 * Flag para pruebas iniciales con UDP, desactivado una vez que la comunicación
 	 * cliente-directorio está implementada y probada.
 	 */
-	public static boolean testModeUDP = true; // HAY QUE PONERLO A FALSE UNA VEZ QUE SE HAYA PROBADO LA COMUNICACIÓN UDP CON EL DIRECTORIO
+	public static boolean testModeUDP = false;
 	/**
 	 * Flag para pruebas iniciales con TCP, desactivado una vez que la comunicación
 	 * cliente-servidor de ficheros está implementada y probada.

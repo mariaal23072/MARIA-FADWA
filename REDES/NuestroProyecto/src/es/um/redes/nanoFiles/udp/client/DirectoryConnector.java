@@ -132,29 +132,49 @@ public class DirectoryConnector {
 		/*
 		 * NOTA: Las excepciones deben tratarse de la más concreta a la más genérica.
 		 * SocketTimeoutException es más concreta que IOException.
-		 */
+		 */ // HECHO
 		
-		DatagramPacket packetToServer = new DatagramPacket(requestData, requestData.length, this.directoryAddress);
-		try {
-			socket.send(packetToServer);
-		} catch (IOException e) {
-			System.err.println("IOException when sending DatagramPacket.");
-			System.exit(-1);
-		}
-		
+		// Enviar datos en un datagrama al directorio
+		DatagramPacket packetToServer = new DatagramPacket(requestData, requestData.length, directoryAddress);
+		// Recibir una respuesta (llenando el array responseData con los datos recibidos)
 		DatagramPacket packetFromServer = new DatagramPacket(responseData, responseData.length);
-		try {
-			socket.receive(packetFromServer);
-		} catch (IOException e) {
-			System.err.println("IOException when receiving DatagramPacket.");
+
+		int intentos = 0; // Número de intentos realizados
+	    boolean received = false; // Si se ha recibido una respuesta
+		
+		// Las excepciones deben ser tratadas, de la más concreta a la más genérica
+	    try {
+	    	// Implementar mecanismo de retransmisión con temporizador
+	    	socket.setSoTimeout(TIMEOUT);
+	    	
+	    	// Reintentando como máximo en MAX_NUMBER_OF_ATTEMPTS ocasiones
+	    	// Mientras que no hayamos recibido respuesta y no hayamos superado el número máximo de intentos
+	    	while (intentos < MAX_NUMBER_OF_ATTEMPTS && !received) {
+        		try {
+        			socket.send(packetToServer); // Enviar el datagrama al directorio
+        			socket.receive(packetFromServer); // Intentar recibir la respuesta (si tarda más de TIMEOUT, se lanzará SocketTimeoutException)
+        			received = true; // Si se recibe sin excepción, marcar como recibido
+        		} catch (SocketTimeoutException e) {
+        			// Mas concreta: SocketTimeoutException, el tiempo expiró sin recibir respuesta
+        			intentos++; // Incrementar el número de intentos si se produce un timeout
+        			System.out.println("TIMEOUT. (Intento " + intentos + "/" + MAX_NUMBER_OF_ATTEMPTS + ") : No se recibió respuesta, reintentando...");
+        		}
+        	}
+	    } catch (IOException e) { // Más genérica: IOException, error de entrada/salida al enviar o recibir datagramas
+	    	// Si se produce una excepción de entrada/salida, se debe informar y terminar el programa.
+			System.err.println("IOException: Error al enviar o recibir datagramas");
 			System.exit(-1);
 		}
+		
+	    // Si después de todos los intentos seguimos sin respuesta, devolvemos null
+	    if (!received) {
+	        System.err.println("No se obtuvo respuesta del directorio tras " + MAX_NUMBER_OF_ATTEMPTS + " intentos.");
+	        return null;
+	    }
+	    
+		// Recortar array solo si se ha recibido algo (debe contener únicamente los datos recibidos, *NO* el búfer de recepción al completo)
 		response = Arrays.copyOf(responseData, packetFromServer.getLength());
 
-		if (response != null && response.length == responseData.length) {
-			System.err.println("Your response is as large as the datagram reception buffer!!\n"
-					+ "You must extract from the buffer only the bytes that belong to the datagram!");
-		}
 		return response;
 	}
 
@@ -171,6 +191,7 @@ public class DirectoryConnector {
 		 * comprobar que la respuesta recibida empieza por "pingok". En tal caso,
 		 * devuelve verdadero, falso si la respuesta no contiene los datos esperados.
 		 */
+		// HECHO
 		boolean success = false;
 		
 		// Convertimos el mensaje a bytes para enviarlo al directorio
@@ -187,7 +208,7 @@ public class DirectoryConnector {
 		String responseMessage = new String(responseData);
 		
 		// Comprobamos si la respuesta recibida empieza por "pingok"
-		if (responseMessage.equals("pingok")) {
+		if (responseMessage.startsWith("pingok")) {
 			success = true;
 		}
 
@@ -219,16 +240,24 @@ public class DirectoryConnector {
 		 * fracaso. 6.Devolver éxito/fracaso de la operación.
 		 */ // HECHO
 				
-		byte[] requestData = new String("ping").getBytes();
+		// 1 y 2.
+		byte[] requestData = ("ping&" + NanoFiles.PROTOCOL_ID).getBytes();
+		// 4.
 		byte[] response = sendAndReceiveDatagrams(requestData);
 		if (response != null) {
 			String receivedMessage = new String(response, 0, response.length);
 			System.out.println("Receiving... " + receivedMessage);
+			// 5.
 			if (receivedMessage.equals("welcome")) {
 				success = true;
 			}
+			else {
+				System.err.println("Error: Se esperaba 'welcome', pero se recibió: " + receivedMessage);
+				success = false;
+			}
 		}
 
+		// 6.
 		return success;
 	}
 
@@ -335,6 +364,6 @@ public class DirectoryConnector {
 
 
 
-
-
 }
+
+

@@ -64,12 +64,13 @@ public class NFDirectoryServer {
 		 * TODO: (Boletín SocketsUDP) Inicializar el atributo socket: Crear un socket
 		 * UDP ligado al puerto especificado por el argumento directoryPort en la
 		 * máquina local,
-		 */
+		 */ // HECHO
+		socket = new DatagramSocket(DIRECTORY_PORT);
 		/*
 		 * TODO: (Boletín SocketsUDP) Inicializar atributos que mantienen el estado del
 		 * servidor de directorio: peers registrados, etc.)
-		 */
-
+		 */ // HECHO
+		registeredPeers = new LinkedHashMap<>();
 
 
 		if (NanoFiles.testModeUDP) {
@@ -95,25 +96,17 @@ public class NFDirectoryServer {
 			/*
 			 * TODO: (Boletín SocketsUDP) Recibimos a través del socket un datagrama
 			 */ //HECHO
-
 			socket.receive(datagramReceivedFromClient);
 
-
-			if (datagramReceivedFromClient == null) {
-				System.err.println("[testMode] NFDirectoryServer.receiveDatagram: code not yet fully functional.\n"
-						+ "Check that all TODOs have been correctly addressed!");
-				System.exit(-1);
+			// Vemos si el mensaje debe ser ignorado (simulación de un canal no confiable)
+			double rand = Math.random();
+			if (rand < messageDiscardProbability) {
+				System.err.println(
+						"Directory ignored datagram from " + datagramReceivedFromClient.getSocketAddress());
 			} else {
-				// Vemos si el mensaje debe ser ignorado (simulación de un canal no confiable)
-				double rand = Math.random();
-				if (rand < messageDiscardProbability) {
-					System.err.println(
-							"Directory ignored datagram from " + datagramReceivedFromClient.getSocketAddress());
-				} else {
-					datagramReceived = true;
-				}
+				datagramReceived = true;
 			}
-
+			
 		}
 
 		return datagramReceivedFromClient;
@@ -137,14 +130,16 @@ public class NFDirectoryServer {
 		 * TODO: (Boletín SocketsUDP) Construir un String partir de los datos recibidos
 		 * en el datagrama pkt. A continuación, imprimir por pantalla dicha cadena a
 		 * modo de depuración.
-		 */
+		 */ // HECHO
+		String receivedMessage = new String(pkt.getData(), 0, pkt.getLength());
+		System.out.println("Directory received message: "+ receivedMessage );
 
 		/*
 		 * TODO: (Boletín SocketsUDP) Después, usar la cadena para comprobar que su
 		 * valor es "ping"; en ese caso, enviar como respuesta un datagrama con la
 		 * cadena "pingok". Si el mensaje recibido no es "ping", se informa del error y
 		 * se envía "invalid" como respuesta.
-		 */
+		 */ // HECHO
 
 		/*
 		 * TODO: (Boletín Estructura-NanoFiles) Ampliar el código para que, en el caso
@@ -154,13 +149,28 @@ public class NFDirectoryServer {
 		 * NanoFiles.PROTOCOL_ID). Se debe extraer el "protocol_id" de la cadena
 		 * recibida y comprobar que su valor coincide con el de NanoFiles.PROTOCOL_ID,
 		 * en cuyo caso se responderá con "welcome" (en otro caso, "denied").
-		 */
+		 */ // HECHO
 
-		/**InetSocketAddress clientAddr = (InetSocketAddress) pkt.getSocketAddress();
-		String messageToClient;
-		if (receivedMessage.eq)
-			**/
-
+		String responseMessage;
+		if (receivedMessage.equals("ping")) { // Si el mensaje es exactamente "ping", respondemos con "pingok"
+			responseMessage = "pingok";
+		} else if (receivedMessage.startsWith("ping&")) { // Si el mensaje comienza por "ping&", comprobamos el protocolId
+			String protocolId = receivedMessage.substring("ping&".length());
+			if (protocolId.equals(NanoFiles.PROTOCOL_ID)) { // Si el protocolId coincide con el nuestro, respondemos con "welcome"
+				responseMessage = "welcome";
+			} else { // Si no, responder con "denied"
+				responseMessage = "denied";
+			}
+		} else { // Si el mensaje no es "ping" ni comienza por "ping&", es un mensaje no válido, respondemos con "invalid" y mostramos un error por pantalla
+			System.err.println("Directory received invalid message: " + receivedMessage );
+			responseMessage = "invalid";
+		}
+		
+		// Construimos un datagrama con la respuesta y lo enviamos al cliente 
+		// (usando la dirección y puerto de origen del datagrama recibido)
+		byte[] responseBytes = responseMessage.getBytes();
+		DatagramPacket responsePacket = new DatagramPacket(responseBytes, responseBytes.length, pkt.getSocketAddress());
+		socket.send(responsePacket);
 
 	}
 

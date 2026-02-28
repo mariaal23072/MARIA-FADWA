@@ -9,7 +9,7 @@ int iterativo(int n, int m, char A[], int &p) {
     p = 1;
     int cont = 1;
     int max = 1;
-    
+
     int i = 0;
     while (i < n-m+1 && max < m) { // recorre Bs de la cadena A (hasta que no haya más Bs o hasta que max sea la longitud de la cadena B)
         cont = 1; // reinicio el contador
