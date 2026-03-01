@@ -195,17 +195,24 @@ public class NFDirectoryServer {
 		 * este objeto, se podrá obtener los valores de los campos del mensaje mediante
 		 * métodos "getter" para procesar el mensaje y consultar/modificar el estado del
 		 * servidor.
-		 */
-
-
+		 */ // HECHO
+		
+		String receivedMessage = new String(pkt.getData(), 0, pkt.getLength());
+		System.out.println("Received Data...\n: "+ receivedMessage );
+		
+		DirMessage dirMessageReceived = DirMessage.fromString(receivedMessage);
 
 		/*
 		 * TODO: Una vez construido un objeto DirMessage con el contenido del datagrama
 		 * recibido, obtener el tipo de operación solicitada por el mensaje y actuar en
 		 * consecuencia, enviando uno u otro tipo de mensaje en respuesta.
-		 */
-		String operation = DirMessageOps.OPERATION_INVALID; // TODO: Cambiar!
-
+		 */ // HECHO
+		String operation = DirMessageOps.OPERATION_INVALID;
+		if (dirMessageReceived != null) {
+			operation = dirMessageReceived.getOperation();
+		}
+		
+		
 		/*
 		 * TODO: (Boletín MensajesASCII) Construir un objeto DirMessage (msgToSend) con
 		 * la respuesta a enviar al cliente, en función del tipo de mensaje recibido,
@@ -213,40 +220,38 @@ public class NFDirectoryServer {
 		 * de directorio (atributos files, etc.). Los atributos del objeto DirMessage
 		 * contendrán los valores adecuados para los diferentes campos del mensaje a
 		 * enviar como respuesta (operation, etc.)
-		 */
-
-
-
-
+		 */ // HECHO
+		
+		DirMessage msgToSend = null;
 
 		switch (operation) {
 		case DirMessageOps.OPERATION_PING: {
 
-
-
-
 			/*
 			 * TODO: (Boletín MensajesASCII) Comprobamos si el protocolId del mensaje del
 			 * cliente coincide con el nuestro.
-			 */
+			 */ //1. // HECHO
 			/*
 			 * TODO: (Boletín MensajesASCII) Construimos un mensaje de respuesta que indique
 			 * el éxito/fracaso del ping (compatible, incompatible), y lo devolvemos como
 			 * resultado del método.
-			 */
+			 */ // 2. // HECHO
 			/*
 			 * TODO: (Boletín MensajesASCII) Imprimimos por pantalla el resultado de
 			 * procesar la petición recibida (éxito o fracaso) con los datos relevantes, a
 			 * modo de depuración en el servidor
-			 */
-
-
-
+			 */ //3. // HECHO
+			
+			String protocolId = dirMessageReceived.getProtocolId();
+			if (protocolId.equals(NanoFiles.PROTOCOL_ID)) { //1.
+				msgToSend = new DirMessage(DirMessageOps.OPERATION_PING_OK); //2.
+				System.out.println("Sending PING_OK...");
+			} else {
+				msgToSend = new DirMessage(DirMessageOps.OPERATION_PING_MAL); //2.
+				System.err.println("Sending PING_BAD...\n Protocolo recibido: " + protocolId); //3.
+			}
 			break;
 		}
-
-
-
 		default:
 			System.err.println("Unexpected message operation: \"" + operation + "\"");
 			System.exit(-1);
@@ -256,9 +261,13 @@ public class NFDirectoryServer {
 		 * TODO: (Boletín MensajesASCII) Convertir a String el objeto DirMessage
 		 * (msgToSend) con el mensaje de respuesta a enviar, extraer los bytes en que se
 		 * codifica el string y finalmente enviarlos en un datagrama
-		 */
-
-
+		 */ // HECHO
+		if (msgToSend != null) {
+			String responseString = msgToSend.toString();
+			byte[] responseBytes = responseString.getBytes();
+			DatagramPacket responsePacket = new DatagramPacket(responseBytes, responseBytes.length, pkt.getSocketAddress());
+			socket.send(responsePacket);
+		}
 
 	}
 

@@ -1,7 +1,6 @@
 package es.um.redes.nanoFiles.udp.message;
 
-
-
+import es.um.redes.nanoFiles.application.NanoFiles;
 
 /**
  * Clase que modela los mensajes del protocolo de comunicación entre pares para
@@ -26,22 +25,26 @@ public class DirMessage {
 	 * TODO: (Boletín MensajesASCII) Definir de manera simbólica los nombres de
 	 * todos los campos que pueden aparecer en los mensajes de este protocolo
 	 * (formato campo:valor)
-	 */
+	 */ // HECHO
+	private static final String FIELDNAME_PROTOCOL = "protocol";
 
-
+	
 
 	/**
 	 * Tipo del mensaje, de entre los tipos definidos en PeerMessageOps.
 	 */
-	private String operation = DirMessageOps.OPERATION_INVALID;
+	private String operation = DirMessageOps.OPERATION_INVALID; // indica que un mensaje está sin inicializar
 	/**
 	 * Identificador de protocolo usado, para comprobar compatibilidad del directorio.
 	 */
-	private String protocolId;
+	private String protocolId; // identificador de protocolo, para mensajes ping
 	/*
 	 * TODO: (Boletín MensajesASCII) Crear un atributo correspondiente a cada uno de
 	 * los campos de los diferentes mensajes de este protocolo.
 	 */
+
+	
+	
 
 
 
@@ -54,9 +57,12 @@ public class DirMessage {
 	 * TODO: (Boletín MensajesASCII) Crear diferentes constructores adecuados para
 	 * construir mensajes de diferentes tipos con sus correspondientes argumentos
 	 * (campos del mensaje)
-	 */
+	 */ // HECHO
 
-
+	public DirMessage(String op, String protocolId) {
+		operation = op;
+		this.protocolId = protocolId;
+	}
 
 
 	public String getOperation() {
@@ -68,7 +74,7 @@ public class DirMessage {
 	 * valores de los atributos de un mensaje. Se aconseja incluir código que
 	 * compruebe que no se modifica/obtiene el valor de un campo (atributo) que no
 	 * esté definido para el tipo de mensaje dado por "operation".
-	 */
+	 */ // HECHO
 	public void setProtocolID(String protocolIdent) {
 		if (!operation.equals(DirMessageOps.OPERATION_PING)) {
 			throw new RuntimeException(
@@ -78,9 +84,10 @@ public class DirMessage {
 	}
 
 	public String getProtocolId() {
-
-
-
+		if (!operation.equals(DirMessageOps.OPERATION_PING)) {
+			throw new RuntimeException(
+					"DirMessage: getProtocolId called for message of unexpected type (" + operation + ")");
+		}
 		return protocolId;
 	}
 
@@ -101,15 +108,13 @@ public class DirMessage {
 		 * TODO: (Boletín MensajesASCII) Usar un bucle para parsear el mensaje línea a
 		 * línea, extrayendo para cada línea el nombre del campo y el valor, usando el
 		 * delimitador DELIMITER, y guardarlo en variables locales.
-		 */
+		 */ // HECHO
 
 		// System.out.println("DirMessage read from socket:");
 		// System.out.println(message);
 		String[] lines = message.split(END_LINE + "");
 		// Local variables to save data during parsing
 		DirMessage m = null;
-
-
 
 		for (String line : lines) {
 			int idx = line.indexOf(DELIMITER); // Posición del delimitador
@@ -123,18 +128,17 @@ public class DirMessage {
 				break;
 			}
 
-
-
-
+			case FIELDNAME_PROTOCOL: {
+				m.setProtocolID(value);
+				break;
+			}
+			
 			default:
 				System.err.println("PANIC: DirMessage.fromString - message with unknown field name " + fieldName);
 				System.err.println("Message was:\n" + message);
 				System.exit(-1);
 			}
 		}
-
-
-
 
 		return m;
 	}
@@ -154,10 +158,16 @@ public class DirMessage {
 		 * TODO: (Boletín MensajesASCII) En función de la operación del mensaje, crear
 		 * una cadena la operación y concatenar el resto de campos necesarios usando los
 		 * valores de los atributos del objeto.
-		 */
-
-
-
+		 */ // HECHO
+		
+		switch (operation) {
+		case DirMessageOps.OPERATION_PING:
+			sb.append(FIELDNAME_PROTOCOL + DELIMITER + NanoFiles.PROTOCOL_ID + END_LINE);
+			break;
+		default:
+			break;
+		}
+		
 		sb.append(END_LINE); // Marcamos el final del mensaje
 		return sb.toString();
 	}
