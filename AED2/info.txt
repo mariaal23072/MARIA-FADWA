@@ -1,3 +1,10 @@
+PARA COMPILAR:
+
+g++ tests_unitarios.cpp dyv.cpp -o tests_unitarios
+.\tests_unitarios.exe
+
+
+
 ENUNCIADO:
 (3) Dada una cadena A de longitud n, y un natural m <= n, encontrar la subcadena B de m caracteres con más caracteres
 consecutivos ordenados ascendentemente (incluyendo caracteres iguales). Llamenos C a la subcadena de B formada por 
