@@ -11,8 +11,7 @@ const int m = 5; // longitud de la cadena B
 int iterativo(int n, int m, char A[], int &p);
 
  // Implementación del algoritmo divide y vencerás
-int dyv(int n, int m, char A[], int &p);
-
+int dyv(int ini, int fin, int m, char A[], int &p);
 
 
 

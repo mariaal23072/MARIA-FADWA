@@ -10,7 +10,15 @@ int main () {
     int pIt = 0;
     int maxIt = iterativo(n,m,A,pIt);
 
-    cout << "Solucion: B, posicion de inicio igual a " << pIt << ", y numero de caracteres en C igual a " << maxIt << "." << endl;
+    // Algoritmo recursivo dyv
+    int pDyv = 0;
+    int maxDyv = dyv(0, n, m, A, pDyv);
+
+    // Iterativo:
+    cout << "Iterativo:\nSolucion: B, posicion de inicio igual a " << pIt << ", y numero de caracteres en C igual a " << maxIt << "." << endl;
     
+    // DyV:
+    cout << "Divide y Venceras:\nSolucion: B, posicion de inicio igual a " << pDyv << ", y numero de caracteres en C igual a " << maxDyv << "." << endl;
+
     return 0;
 }
