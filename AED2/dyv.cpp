@@ -7,7 +7,7 @@ int iterativo(int n, int m, char A[], int &p) {
     int max = 1;
 
     int i = 0;
-    while (i < n-m+1) { // recorre Bs de la cadena A (hasta que no haya más Bs o hasta que max sea la longitud de la cadena B)
+    while (i < n-m+1 && max < m ) { // recorre Bs de la cadena A (hasta que no haya más Bs o hasta que max sea la longitud de la cadena B)
         cont = 1; // reinicio el contador
         for (int j = i; j <= i+m-2; j++) { // recorre carácteres de la cadena B hasta el penúltimo carácter (porque el último no tiene un siguiente para comparar)
             if (A[j] <= A[j+1]) { // si el carácter actual es menor o igual al siguiente, entonces está ordenado
