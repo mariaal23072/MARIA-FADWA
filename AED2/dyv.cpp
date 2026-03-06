@@ -14,7 +14,7 @@ int iterativo(int n, int m, char A[], int &p) {
                 cont++;           // aumento el contador
             }
             else { // si el siguiente carácter no está ordenado
-                if (cont >= max) { // si la cantidad de caracteres ordenados hasta ahora es mayor o igual que max
+                if (cont > max) { // si la cantidad de caracteres ordenados hasta ahora es mayor o igual que max
                     max = cont; // actualizo max
                     p = i+1; // actualizo p con la posición de inicio de la cadena ordenada más larga encontrada hasta ahora
                 }
@@ -22,7 +22,7 @@ int iterativo(int n, int m, char A[], int &p) {
             }
         // volvemos a comparar con el siguiente carácter de la cadena B (a ver si hay una cadena ordenada más larga dentro de B)
         }
-        if (cont >= max) { // comprobamos el último tramo ordenado de la cadena B
+        if (cont > max) { // comprobamos el último tramo ordenado de la cadena B
             max = cont;
             p = i+1; // actualizo p con la posición de inicio de la cadena ordenada más larga encontrada hasta ahora
         }
@@ -53,13 +53,13 @@ int dyv(int ini, int fin, int m, char A[], int &p) {
             if (A[i] <= A[i+1]){
                 cont++;
             } else {
-                if (cont >= max_local){
+                if (cont > max_local){
                     max_local = cont;
                 }
                 cont = 1;
             }
         }
-        if (cont >= max_local){
+        if (cont > max_local){
             max_local = cont;
         }
 
@@ -106,19 +106,19 @@ int dyv(int ini, int fin, int m, char A[], int &p) {
             if(A[j] <= A[j+1]){
                 cont++;
             }else{
-                if(cont >= max_actual){
+                if(cont > max_actual){
                     max_actual = cont;
                 }
                 cont = 1;
             }
         }
-        if(cont >= max_actual){
+        if(cont > max_actual){
             max_actual = cont;
         }
 
         // Me quedo con la mejor ventana de la zona central
         // Y uso >= para que si hay empate, se actualice (como en el iterativo)
-        if(max_actual >= maxCentro){
+        if(max_actual > maxCentro){
             maxCentro = max_actual;
             pCentro = i + 1;
         }
@@ -128,14 +128,14 @@ int dyv(int ini, int fin, int m, char A[], int &p) {
     int max_final = maxIzq;
     p = pIzq;
 
-    if(maxDer >= max_final){
-        max_final = maxDer;
-        p = pDer;
-    }
-
-    if(maxCentro >= max_final){
+    if(maxCentro > max_final){
         max_final = maxCentro;
         p = pCentro;
+    }
+
+    if(maxDer > max_final){
+        max_final = maxDer;
+        p = pDer;
     }
 
     return max_final;
