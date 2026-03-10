@@ -9,20 +9,22 @@
 
 using namespace std;
 
-// Peor caso: cadena igual o creciente
+// Peor caso: cadena decreciente
 vector<char> generarPeorCaso(int longitud) {
     vector<char> A(longitud);
     for (int i = 0; i < longitud; ++i) {
-        A[i] = 'a'; // cadena de caracteres iguales
+        A[i] = 'z' - (i % 26); // cadena de caracteres decrecientes (repite cada 26 caracteres)
     }
     return A;
 }
 
-// Mejor caso: cadena decreciente
+// Mejor caso: cadena creciente ( o cadena igual )
 vector<char> generarMejorCaso(int longitud) {
     vector<char> A(longitud);
     for (int i = 0; i < longitud; ++i) {
-        A[i] = 'z' - (i % 26); // cadena de caracteres decrecientes (repite cada 26 caracteres)
+        A[i] = 'a'; // cadena de caracteres iguales
+        // También valdría:
+        // A[i] = 'a' + (i % 26); // cadena de caracteres crecientes (repite cada 26 caracteres)
     }
     return A;
 }
@@ -57,8 +59,6 @@ int main() {
     for (int i = 0; i <= 10; i += 1) {
         longitudes.push_back(1000 * pow(2, i));
     }
-
-    int m = 5; // longitud de la cadena B a buscar
 
     std::ofstream csv("resultados.csv");
     csv << "Longitud,MejorCaso,PeorCaso\n";

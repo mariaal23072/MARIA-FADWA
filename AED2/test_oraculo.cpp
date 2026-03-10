@@ -17,8 +17,7 @@ void generarSecuenciaAleatoria(int longitud, char A[], unsigned int semilla) {
 
 int main() {
 
-    unsigned int semilla = 42; // Semilla ej para generar secuencias aleatorias
-    int m = 5;
+    unsigned int semilla = 123; // Semilla ej para generar secuencias aleatorias
 
     // Tamaños de prueba
     vector<int> longitudes = {5, 10, 20, 50, 100, 1000};

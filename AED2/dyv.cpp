@@ -2,6 +2,11 @@
 
 int iterativo(int n, int m, char A[], int &p) {
 
+    if (n < m) {
+        p = 0;
+        return 0;
+    }
+
     p = 1;
     int cont = 1;
     int max = 1;
@@ -73,8 +78,18 @@ int dyv(int ini, int fin, int m, char A[], int &p) {
     int pIzq = 0;
     int maxIzq = dyv(ini, mitad, m, A, pIzq);
 
+    if (maxIzq == m){ // Si ya he encontrado una cadena de tamaño m en la parte izquierda, no necesito seguir buscando
+        p = pIzq;
+        return maxIzq;
+    }
+
     int pDer = 0;
     int maxDer = dyv(mitad + 1, fin, m, A, pDer);
+
+    if (maxDer == m){ // Si ya he encontrado una cadena de tamaño m en la parte derecha, no necesito seguir buscando
+        p = pDer;
+        return maxDer;
+    }
 
     // Ahora lo Combino (Zona del cruce)
     // Lo que tenemos que hacer es revisar las cadenas de tamaño 'm' que empiezan en la parte
@@ -121,6 +136,11 @@ int dyv(int ini, int fin, int m, char A[], int &p) {
         if(max_actual > maxCentro){
             maxCentro = max_actual;
             pCentro = i + 1;
+        }
+
+        if (maxCentro == m){ // Si ya he encontrado una cadena de tamaño m en la zona del cruce, no necesito seguir buscando
+            p = pCentro;
+            return maxCentro;
         }
     }
 
