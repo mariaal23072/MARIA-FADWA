@@ -37,61 +37,8 @@ int iterativo(int n, int m, char A[], int &p) {
     return max;
 }
 
-
-int dyv(int ini, int fin, int m, char A[], int &p) {
-    
-    // Caso base
-    int longitud = fin - ini +1;
-
-    // Si el tramo que tengo es menor que m, no puedo formar ni una cadena de tamaño m.
-    if (longitud < m){
-        return 0;
-    }
-
-    // Si el tramo mide exactamente m, solo hay una subcadena posible.
-    // Hago lo mismo que he hecho en el iterativo, pero solo para esta subcadena.
-    if (longitud == m){
-        int max_local = 1;
-        int cont = 1;
-
-        for (int i = ini; i < fin; i++){
-            if (A[i] <= A[i+1]){
-                cont++;
-            } else {
-                if (cont > max_local){
-                    max_local = cont;
-                }
-                cont = 1;
-            }
-        }
-        if (cont > max_local){
-            max_local = cont;
-        }
-
-        p = ini + 1;  // Actualizo p (empezando en 1, como me piden)
-        return max_local;
-    }
-
-    // Divide y Vencerás
-    int mitad = (ini + fin) / 2;
-
-    int pIzq = 0;
-    int maxIzq = dyv(ini, mitad, m, A, pIzq);
-
-    if (maxIzq == m){ // Si ya he encontrado una cadena de tamaño m en la parte izquierda, no necesito seguir buscando
-        p = pIzq;
-        return maxIzq;
-    }
-
-    int pDer = 0;
-    int maxDer = dyv(mitad + 1, fin, m, A, pDer);
-
-    if (maxDer == m){ // Si ya he encontrado una cadena de tamaño m en la parte derecha, no necesito seguir buscando
-        p = pDer;
-        return maxDer;
-    }
-
-    // Ahora lo Combino (Zona del cruce)
+int combinar(int ini, int fin, int mitad, int m, char A[], int maxIzq, int pIzq, int maxDer, int pDer, int &p) {
+    // Aquí lo Combino (Zona del cruce)
     // Lo que tenemos que hacer es revisar las cadenas de tamaño 'm' que empiezan en la parte
     // izquierda y terminan en la parte derecha (que cruzan la frontera vamos)
     int maxCentro = 0;
@@ -100,14 +47,14 @@ int dyv(int ini, int fin, int m, char A[], int &p) {
 
     // Calculo donde puede empezar una ventana para que cruce la mitad
     // Como muy tarde empieza en mitad y como muy pronto en mitad -m +2
-    int inicio_cruce = mitad -m + 2;
+    int inicio_cruce = mitad - m + 2;
     if(inicio_cruce < ini){
         inicio_cruce = ini;    //Evitamos salir por la izquierda
     }
 
     int fin_cruce = mitad;
-    if(fin_cruce + m - 1> fin){
-        fin_cruce = fin -m +1;    // Evitamos salir por la derecha
+    if( fin_cruce + m - 1 > fin ){
+        fin_cruce = fin - m +1;    // Evitamos salir por la derecha
     }
 
 
@@ -159,6 +106,72 @@ int dyv(int ini, int fin, int m, char A[], int &p) {
     }
 
     return max_final;
+}
+
+
+int solucionPequena(int ini, int fin, char A[], int &p) {
+    int max_local = 1;
+    int cont = 1;
+
+    // Recorro la subcadena de tamaño m
+    for (int i = ini; i < fin; i++){
+        if (A[i] <= A[i+1]){
+            cont++;
+        } else {
+            if (cont > max_local){
+                max_local = cont;
+            }
+            cont = 1;
+        }
+    }
+
+    // Comprobación final por si la racha termina al final del bloque
+    if (cont > max_local){
+        max_local = cont;
+    }
+
+    p = ini + 1;  // Actualizo p (empezando en 1, como me piden)
+    return max_local;
+}
+
+
+int dyv(int ini, int fin, int m, char A[], int &p) {
+    
+    // Caso base
+    int longitud = fin - ini + 1;
+
+    // Si el tramo que tengo es menor que m, no puedo formar ni una cadena de tamaño m.
+    if (longitud < m){
+        return 0;
+    }
+
+    // Si el tramo mide exactamente m, solo hay una subcadena posible.
+    // Hago lo mismo que he hecho en el iterativo, pero solo para esta subcadena.
+    if (longitud == m){
+        return solucionPequena(ini, fin, A, p);
+    }
+
+    // Divide
+    int mitad = (ini + fin) / 2;
+
+    // y Vencerás
+    int pIzq = 0;
+    int maxIzq = dyv(ini, mitad, m, A, pIzq);
+    if (maxIzq == m){ // Si ya he encontrado una cadena de tamaño m en la parte izquierda, no necesito seguir buscando
+        p = pIzq;
+        return maxIzq;
+    }
+
+    int pDer = 0;
+    int maxDer = dyv(mitad + 1, fin, m, A, pDer);
+    if (maxDer == m){ // Si ya he encontrado una cadena de tamaño m en la parte derecha, no necesito seguir buscando
+        p = pDer;
+        return maxDer;
+    }
+
+    // Combino
+    return combinar(ini, fin, mitad, m, A, maxIzq, pIzq, maxDer, pDer, p);
+
 }
 
 
