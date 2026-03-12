@@ -2,14 +2,16 @@
 
 int iterativo(int n, int m, char A[], int &p) {
 
+    // Si la longitud de la cadena es menor que m, no puedo formar ni una subcadena de tamaño m,
+    // así que devuelvo 0 y p = 0
     if (n < m) {
         p = 0;
         return 0;
     }
 
-    p = 1;
-    int cont = 1;
-    int max = 1;
+    p = 1; // posición de inicio de la subcadena ordenada más larga encontrada hasta ahora (empezando en 1)
+    int cont = 1; // contador de caracteres ordenados consecutivos en la subcadena actual
+    int max = 1; // longitud de la subcadena ordenada más larga encontrada hasta ahora
 
     int i = 0;
     while (i < n-m+1 && max < m ) { // recorre Bs de la cadena A (hasta que no haya más Bs o hasta que max sea la longitud de la cadena B)
@@ -39,11 +41,10 @@ int iterativo(int n, int m, char A[], int &p) {
 
 int combinar(int ini, int fin, int mitad, int m, char A[], int maxIzq, int pIzq, int maxDer, int pDer, int &p) {
     // Aquí lo Combino (Zona del cruce)
-    // Lo que tenemos que hacer es revisar las cadenas de tamaño 'm' que empiezan en la parte
+    // Lo que tenemos que hacer es revisar las cadenas de tamaño m que empiezan en la parte
     // izquierda y terminan en la parte derecha (que cruzan la frontera vamos)
     int maxCentro = 0;
     int pCentro = 0;
-
 
     // Calculo donde puede empezar una ventana para que cruce la mitad
     // Como muy tarde empieza en mitad y como muy pronto en mitad -m +2
@@ -57,11 +58,11 @@ int combinar(int ini, int fin, int mitad, int m, char A[], int maxIzq, int pIzq,
         fin_cruce = fin - m +1;    // Evitamos salir por la derecha
     }
 
-
     // Miro si todas las ventanas de tamaño m en esta zona del cruce
+    // (bucle como el del iterativo pero solo para esta zona del cruce)
     for(int i = inicio_cruce; i <= fin_cruce; i++) {
-        int cont = 1;
-        int max_actual = 1;
+        int cont = 1; // contador de caracteres ordenados consecutivos en la subcadena actual
+        int max_actual = 1; // longitud de la subcadena ordenada más larga encontrada en la ventana actual
 
         //Evalúo la racha dentro de esta ventana específica de tamaño m
         for (int j = i; j < i+m-1; j++) {
@@ -79,7 +80,6 @@ int combinar(int ini, int fin, int mitad, int m, char A[], int maxIzq, int pIzq,
         }
 
         // Me quedo con la mejor ventana de la zona central
-        // Y uso >= para que si hay empate, se actualice (como en el iterativo)
         if(max_actual > maxCentro){
             maxCentro = max_actual;
             pCentro = i + 1;
@@ -95,23 +95,26 @@ int combinar(int ini, int fin, int mitad, int m, char A[], int maxIzq, int pIzq,
     int max_final = maxIzq;
     p = pIzq;
 
+    // Si maxCentro es mejor que maxIzq, me quedo con maxCentro
     if(maxCentro > max_final){
         max_final = maxCentro;
         p = pCentro;
     }
 
+    // Si maxDer es mejor que max_final, me quedo con maxDer
     if(maxDer > max_final){
         max_final = maxDer;
         p = pDer;
     }
 
+    // Devuelvo el resultado final
     return max_final;
 }
 
 
 int solucionPequena(int ini, int fin, char A[], int &p) {
-    int max_local = 1;
-    int cont = 1;
+    int max_local = 1; // longitud de la subcadena ordenada más larga encontrada en el bloque actual
+    int cont = 1; // contador de caracteres ordenados consecutivos en la subcadena actual
 
     // Recorro la subcadena de tamaño m
     for (int i = ini; i < fin; i++){
@@ -130,15 +133,16 @@ int solucionPequena(int ini, int fin, char A[], int &p) {
         max_local = cont;
     }
 
-    p = ini + 1;  // Actualizo p (empezando en 1, como me piden)
+    p = ini + 1;  // Actualizo p (inicio de la cadena de tamaño m + 1, porque se pide que empiece en 1)
     return max_local;
 }
 
 
 int dyv(int ini, int fin, int m, char A[], int &p) {
     
-    // Caso base
-    int longitud = fin - ini + 1;
+    // Caso base:
+
+    int longitud = fin - ini + 1; // longitud del tramo que estoy evaluando
 
     // Si el tramo que tengo es menor que m, no puedo formar ni una cadena de tamaño m.
     if (longitud < m){
@@ -152,19 +156,22 @@ int dyv(int ini, int fin, int m, char A[], int &p) {
     }
 
     // Divide
-    int mitad = (ini + fin) / 2;
+    int mitad = (ini + fin) / 2; // mitad del tramo actual
 
-    // y Vencerás
-    int pIzq = 0;
-    int maxIzq = dyv(ini, mitad, m, A, pIzq);
-    if (maxIzq == m){ // Si ya he encontrado una cadena de tamaño m en la parte izquierda, no necesito seguir buscando
+     // Vencerás
+     // Llamo recursivamente a la parte izquierda y a la parte derecha
+    int pIzq = 0; // p de la parte izquierda
+    int maxIzq = dyv(ini, mitad, m, A, pIzq); // resultado de la parte izquierda
+    // Si ya he encontrado una cadena de tamaño m en la parte izquierda, no necesito seguir buscando
+    if (maxIzq == m){ 
         p = pIzq;
         return maxIzq;
     }
 
-    int pDer = 0;
-    int maxDer = dyv(mitad + 1, fin, m, A, pDer);
-    if (maxDer == m){ // Si ya he encontrado una cadena de tamaño m en la parte derecha, no necesito seguir buscando
+    int pDer = 0; // p de la parte derecha
+    int maxDer = dyv(mitad + 1, fin, m, A, pDer); // resultado de la parte derecha
+    // Si ya he encontrado una cadena de tamaño m en la parte derecha, no necesito seguir buscando
+    if (maxDer == m){
         p = pDer;
         return maxDer;
     }

@@ -13,10 +13,4 @@ int iterativo(int n, int m, char A[], int &p);
  // Implementación del algoritmo divide y vencerás
 int dyv(int ini, int fin, int m, char A[], int &p);
 
-
-
-
-
-
-
 #endif

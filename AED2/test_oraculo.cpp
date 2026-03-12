@@ -7,9 +7,9 @@ using namespace std;
 
 // Llenar el array con letras aleatorias de la 'a' a la 'z'
 void generarSecuenciaAleatoria(int longitud, char A[], unsigned int semilla) {
-    mt19937 gen(semilla);
-    uniform_int_distribution<> dist('a', 'z');
-
+    mt19937 gen(semilla); // Generador de números aleatorios con la semilla dada
+    uniform_int_distribution<> dist('a', 'z'); // Distribución uniforme para generar caracteres entre 'a' y 'z'
+    // Llenamos el array con caracteres aleatorios
     for (int i = 0; i < longitud; ++i) {
         A[i] = dist(gen);
     }
@@ -22,6 +22,8 @@ int main() {
     // Tamaños de prueba
     vector<int> longitudes = {5, 10, 20, 50, 100, 1000};
 
+    // para cada longitud, genera una secuencia aleatoria de esa longitud, 
+    // ejecuta ambos algoritmos (DyV e iterativo) y compara los resultados.
     for (size_t i = 0; i < longitudes.size(); ++i) {
         int longitud = longitudes[i];
         // Aqui guardamos la secuencia de letras
@@ -36,7 +38,7 @@ int main() {
 
         // Probamos los dos algoritmos: DyV e iterativo
         int resultadoIterativo = iterativo(longitud, m, A, pIter);
-        int dyvOutput = dyv(0, longitud - 1, m, A, pDyv);
+        int dyvOutput = dyv(0, longitud - 1, m, A, pDyv); // restamos 1 a longitud para que el índice sea correcto
         
         cout << "Longitud de la secuencia: " << longitud << endl;
         cout << "Resultado DyV: " << dyvOutput << " (p = " << pDyv << ")" << endl;

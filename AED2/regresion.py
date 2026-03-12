@@ -29,10 +29,7 @@ print(f"  R²: {r_peor**2:.4f}")
 print(f"  MSE: {np.mean((df['PeorCaso'] - (slope_peor * df['n'] + intercept_peor))**2):.4f}")
 print(f"  p-valor: {p_peor:.4e}\n")
 
-
-# =========================================================
-# GRÁFICOS CON EJE X EN ESCALA LOGARÍTMICA
-# =========================================================
+# Gráficos
 
 # 1. Gráfico de dispersión sin ajuste
 plt.figure()
@@ -70,7 +67,7 @@ plt.legend()
 plt.grid(True)
 plt.savefig('ajuster_peor_log.pdf')
 
-# idem pero sin log
+# 4. Gráfico de dispersión sin escala logarítmica
 
 # 1. Gráfico de dispersión sin ajuste
 plt.figure()
