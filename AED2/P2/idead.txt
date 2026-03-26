@@ -1,0 +1,27 @@
+PROBLEMA I_AR:
+
+Agrupar un número N de alumnos en pupitres de 2 2n 2.
+MAximizar el beneficio, juntando alumnos calculando:
+Calculo: sumando grados de amistas mutua y multiplicando por la suma de sus grados de compenetración en el trabajo.
+Beneficio(i,j)=(amistad(i,j)+amistad(j,i))*(compenetracion[i][j] + compenetracion[j][i])
+
+
+Solución buena:
+que no empeore en más de un 30% la solución óptima.
+Encontrar la mejor solución en cada momento sin dar marcha atrás.
+Nº max de alumnos: 100
+
+
+
+PROBLEMA L_Ba:
+Tenemos N camisetas y 6 tallas. Como dice que hay el mismo número de cada talla, tendremos exactamente N/6 camisetas de cada una.
+Tenemos M voluntarios que solo aceptan 2 tallas concretas.
+
+Cogeremos al voluntario 1 y miramos sus dos tallas preferidas. Si nos quedan camisetas de su primera opción, se la "prestamos"(restamos 1 al stock) 
+y llamamos a la recursividad para ver si el resto de voluntarios tienen camisetas.
+ Si la llamada responde que sí imprimimos YES
+ Si la llamada se atasca y no avanza (eso es que algún voluntario de alante se queda sin tallas), le quitamos la camiseta al voluntario 1 sumando 1 al stock
+ y probamos a darle la segunda opción que es lo que sería el backtracking.
+ Si probamos todas las opciones posibles y vemos que no cuadra nada imprimimos NO
+
+

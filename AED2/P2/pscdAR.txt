@@ -1,0 +1,52 @@
+// Número de alumnos
+entero N
+
+// Estructura para los candidatos
+ESTRUCTURA Pareja:
+    entero alumno1
+    entero alumno2
+    entero beneficio
+
+// Función para calcular el beneficio de una pareja
+FUNCIÓN organizacionClase (N, Amistad[][], Compenetracion[][]):
+    // Inicialización
+    lista_candidatos = [] // vacía
+    emparejado[N] = false // todos los alumnos están sin emparejar
+    beneficio_total = 0
+
+    // todas las posibles parejas y calcular su beneficio
+    PARA i DESDE 0 HASTA N-1:
+        PARA j DESDE i+1 HASTA N-1:
+        // Calculo con la funcion del beneficio
+            beneficio = (Amistad[i][j] + Amistad[j][i]) * (Compenetracion[i][j] + Compenetracion[j][i])
+            
+            // Crear pareja y guardarla
+            nueva_pareja = Pareja(i, j, beneficio)
+            añadir nueva_pareja a lista_candidatos
+
+    // Ordenar parejas por beneficio de mayor a menor
+    ORDENAR lista_candidatos POR beneficio DESCENDENTE
+
+    // Emparejar alumnos
+    PARA cada pareja EN lista_candidatos:
+        SI NO emparejado[pareja.alumno1] Y NO emparejado[pareja.alumno2]:
+            // Emparejar a los alumnos
+            emparejado[pareja.alumno1] = true
+            emparejado[pareja.alumno2] = true
+            beneficio_total = beneficio_total + pareja.beneficio
+
+            // Añadirlos a la solucion
+            AÑADIR pareja.alumno1 Y pareja.alumno2 A solucion
+
+    // EN caso IMPAR
+    SI N ES IMPAR:
+        i = 0
+        encontrado = false
+        // Mientras que queden almnos y no haya ninguno sin emparejar
+        MIENTRAS i < N Y NO encontrado:
+            SI NO emparejado[i]:
+                AÑADIR i A solucion
+                encontrado = true // para salir del bucle
+            i = i + 1
+
+    DEVOLVER beneficio_total, solucion
