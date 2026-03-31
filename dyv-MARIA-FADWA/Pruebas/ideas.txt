@@ -1,0 +1,21 @@
+Nos dan:
+ejemplo[n] = {c, d, d, a, b, c, d, a, c, c}
+m = 5
+n = 10
+
+B[m] = {a, b, c, d, a} --> subcadena con más caracteres consecutivos ordenados ascendentemente (incluyendo caracteres iguales).
+C[] =  {a, b, c, d} --> la subcadena de B formada por dichos caracteres que están en orden alfabético consecutivo.
+p = 4 --> índice de comienzo de B (empezando desde 1)
+
+En resumen:
+1. Bucle principal: Recorres tu texto para elegir el inicio de cada bloque de m letras.
+2. Variables de control: Para cada bloque, creas un contador para la racha actual (que empieza en 1).
+3. Bucle secundario: Recorres las m letras de ese bloque. Si la letra actual es mayor o igual que la anterior (cadena[j] >= cadena[j-1]),
+le sumas 1 al contador. Si es menor (se rompe el orden), reinicias el contador de la racha.
+4. Guardar el mejor: Llevas el registro del contador más alto que hayas encontrado y la posición donde empezó ese bloque.
+
+¿Cuántas cadenas longitud m se hacen? n-m+1.
+
+int cont: vaya contando la racha actual de caracteres ordenados.
+int maxCont: vaya guardando la racha más larga que hayas encontrado.
+int p: vaya guardando la posición de inicio de la mejor racha.

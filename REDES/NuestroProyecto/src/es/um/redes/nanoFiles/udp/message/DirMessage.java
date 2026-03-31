@@ -1,6 +1,10 @@
 package es.um.redes.nanoFiles.udp.message;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import es.um.redes.nanoFiles.application.NanoFiles;
+import es.um.redes.nanoFiles.util.FileInfo;
 
 /**
  * Clase que modela los mensajes del protocolo de comunicación entre pares para
@@ -27,6 +31,9 @@ public class DirMessage {
 	 * (formato campo:valor)
 	 */ // HECHO
 	private static final String FIELDNAME_PROTOCOL = "protocol";
+	// Para el mensaje de serve, se envían el nickname y el puerto del peer
+	private static final String FIELDNAME_NICKNAME = "nickname";
+	private static final String FIELDNAME_PORT = "port";
 
 	
 
@@ -42,10 +49,35 @@ public class DirMessage {
 	 * TODO: (Boletín MensajesASCII) Crear un atributo correspondiente a cada uno de
 	 * los campos de los diferentes mensajes de este protocolo.
 	 */
-
 	
-	
+	// Para serve:
 
+	private String nickname; // nickname del peer, para mensajes de serve
+	private int port; // puerto del peer, para mensajes de serve
+	
+	// Getteres y setters
+	public String getNickname() {
+		return nickname;
+	}
+
+	public void setNickname(String nickname) {
+		this.nickname = nickname;
+	}
+
+	public int getPort() {
+		return port;
+	}
+
+	public void setPort(int port) {
+		this.port = port;
+	}
+	
+	// Para dirfile
+	private List<FileInfo> fileList = new ArrayList<>(); // lista de ficheros del peer, para mensajes de dirfile
+
+	public List<FileInfo> getFileList() {
+		return fileList;
+	}
 
 
 
@@ -133,6 +165,30 @@ public class DirMessage {
 				break;
 			}
 			
+			// Para serve
+			case FIELDNAME_NICKNAME: {
+				m.setNickname(value);
+				break;
+			}
+			
+			case FIELDNAME_PORT: {
+				m.setPort(Integer.parseInt(value)); // parseamos el puerto a entero
+				break;
+			}
+			
+			// Para dirfile
+			case "file": {
+				String[] partes = value.split("\\|"); // escapamos el delimitador "|" para separar los campos del fichero
+				if (partes.length == 3) {
+					String name = partes[0]; // nombre del fichero
+					long size = Long.parseLong(partes[1]); // tamaño del fichero
+					String hash = partes[2]; // hash del fichero
+					// Añadir dichero a la lista
+					m.getFileList().add(new FileInfo(hash, name, size, ""));
+				}
+				break;
+			}
+			
 			default:
 				System.err.println("PANIC: DirMessage.fromString - message with unknown field name " + fieldName);
 				System.err.println("Message was:\n" + message);
@@ -164,6 +220,24 @@ public class DirMessage {
 		case DirMessageOps.OPERATION_PING:
 			sb.append(FIELDNAME_PROTOCOL + DELIMITER + NanoFiles.PROTOCOL_ID + END_LINE);
 			break;
+		
+		// Para serve, se envían el nickname y el puerto del peer
+		case DirMessageOps.OPERATION_SERVE:
+			sb.append("nickname" + DELIMITER + nickname + END_LINE);
+			sb.append("port" + DELIMITER + port + END_LINE);
+			break;
+		
+		// Para dirfiles, se envía una línea por cada fichero, con el formato "file:nombre|tamaño|hash"
+		case DirMessageOps.OPERATION_DIRFILES:
+			if (fileList != null && !fileList.isEmpty()) {
+			    for (FileInfo file : fileList) {
+			        sb.append("file" + DELIMITER + file.fileName + "|" + file.fileSize + "|" + file.fileHash + END_LINE);
+			    }
+			}
+            break;
+			
+			
+			
 		default:
 			break;
 		}

@@ -252,6 +252,36 @@ public class NFDirectoryServer {
 			}
 			break;
 		}
+		// Para serve
+		case DirMessageOps.OPERATION_SERVE: {
+			// Extraer datos del mensaje recibido
+			String nickname = dirMessageReceived.getNickname();
+			int port = dirMessageReceived.getPort();
+			
+			// Obtener IP del cliente por el datagrama y juntarla con el puerto TCP
+			InetSocketAddress peerAddress = new InetSocketAddress(pkt.getAddress(), port);
+			
+			// Registrar el peer en los datos del servidor
+			registeredPeers.put(nickname, peerAddress);
+			System.out.println("Directorio: Peer registrado: " + nickname + " escuchando en " + peerAddress);
+			
+			// Construir mensaje de respuesta
+			msgToSend = new DirMessage(DirMessageOps.OPERATION_SERVE_OK);
+			break;
+			
+		}
+		// Para dirfiles
+		case DirMessageOps.OPERATION_REQUEST_DIRFILE: {
+			// Construir mensaje de respuesta con la lista de ficheros del directorio
+			msgToSend = new DirMessage(DirMessageOps.OPERATION_DIRFILES);
+			// Añadir la lista de ficheros del directorio al mensaje de respuesta
+			for (FileInfo file : directoryFiles) {
+				msgToSend.getFileList().add(file);
+			}
+			System.out.println("Directorio: Enviando lista de " + directoryFiles.length + " ficheros.");
+			break;
+		}
+		
 		default:
 			System.err.println("Unexpected message operation: \"" + operation + "\"");
 			System.exit(-1);

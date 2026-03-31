@@ -16,4 +16,12 @@ public class DirMessageOps {
 	
 	// TODO: definir las operaciones del protocolo de directorio
 	
+	// Para serve
+	public static final String OPERATION_SERVE = "serve"; // valor que debe tomar el atributo 'operation' para hacer serve
+	public static final String OPERATION_SERVE_OK = "serveOk";
+	public static final String OPERATION_SERVE_MAL = "serveMal";
+	
+	// Para dirfile
+	public static final String OPERATION_REQUEST_DIRFILE = "requestDirfiles"; // valor que debe tomar el atributo 'operation' para hacer dirfile
+	public static final String OPERATION_DIRFILES = "dirfiles"; // valor que debe tomar el atributo 'operation' para enviar un mensaje dirfile con la lista de ficheros al cliente
 }

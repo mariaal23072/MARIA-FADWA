@@ -9,6 +9,8 @@ import java.net.SocketTimeoutException;
 import java.util.Map;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
+import java.util.List;
+
 import es.um.redes.nanoFiles.tcp.client.NFConnector;
 
 import es.um.redes.nanoFiles.application.NanoFiles;
@@ -327,8 +329,38 @@ public class DirectoryConnector {
 		boolean success = false;
 
 		// TODO: Ver TODOs en pingDirectory y seguir esquema similar
+		// HECHO
+		
+		// 1.
+		DirMessage serveMessage = new DirMessage(DirMessageOps.OPERATION_SERVE);
+		serveMessage.setNickname(NanoFiles.peerNickname); // Usamos el nickname del peer (definido en NanoFiles)
+		serveMessage.setPort(serverPort); // Usamos el puerto TCP en el que este peer sirve ficheros a otros (pasado como argumento)
+		
+		//2.
+		String serveMessageString = serveMessage.toString();
+		
+		//3.
+		byte[] serveData = serveMessageString.getBytes();
+		
+		//4. ( El método crea un datagrama con los bytes)
+		byte[] response = sendAndReceiveDatagrams(serveData);
+		
+		if (response != null) {
+			String responseString = new String(response, 0, response.length);
+			System.out.println("Receiving... " + responseString);
 
+			// 5.
+			DirMessage responseMessage = DirMessage.fromString(responseString);
 
+			// 6. Comprobar si la operación de la respuesta es OPERATION_SERVE_OK
+			if (responseMessage.getOperation().equals(DirMessageOps.OPERATION_SERVE_OK)) {
+				success = true;
+			} else {
+				System.err.println("Error: Registro Falló. Se esperaba la operación: " + DirMessageOps.OPERATION_SERVE_OK
+						+ ". Pero se recibió: " + responseMessage.getOperation());
+				success = false;
+			}
+		}
 
 		return success;
 	}
@@ -343,8 +375,21 @@ public class DirectoryConnector {
 	public FileInfo[] getFileList() {
 		FileInfo[] filelist = new FileInfo[0];
 		// TODO: Ver TODOs en pingDirectory y seguir esquema similar
+		// Crear mensaje de petición
+		DirMessage requestMsg = new DirMessage(DirMessageOps.OPERATION_REQUEST_DIRFILE);
 
-
+		// Enviar y recibir los bytes
+		byte[] response = sendAndReceiveDatagrams(requestMsg.toString().getBytes());
+		
+		if (response != null) {
+			// Convertir respuesta a objeto DirMessage
+			DirMessage responseMsg = DirMessage.fromString(new String(response, 0, response.length));
+			
+			// Extraer la lista de ficheros
+			List<FileInfo> lista = responseMsg.getFileList();
+			filelist = lista.toArray(new FileInfo[0]);
+			
+		}
 
 		return filelist;
 	}
