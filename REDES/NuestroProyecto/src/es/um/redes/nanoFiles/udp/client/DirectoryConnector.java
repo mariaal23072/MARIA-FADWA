@@ -397,8 +397,20 @@ public class DirectoryConnector {
 	public Map<String, InetSocketAddress> getPeerList() {
 		Map<String, InetSocketAddress> peers = new LinkedHashMap<String, InetSocketAddress>();
 
+		// Mensaje de petición de lista de peers
+		DirMessage requestMsg = new DirMessage(DirMessageOps.OPERATION_REQUEST_PEERS);
 
-
+		// Enviar y recibir los bytes
+		byte[] response = sendAndReceiveDatagrams(requestMsg.toString().getBytes());
+		
+		if (response != null ) {
+			DirMessage responseMsg = DirMessage.fromString(new String(response, 0, response.length));
+			
+			// Extracción del diccionario de peers
+			peers = responseMsg.getPeerList();
+			
+		}
+		
 		return peers;
 	}
 

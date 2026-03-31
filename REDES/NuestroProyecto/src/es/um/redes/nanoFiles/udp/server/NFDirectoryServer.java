@@ -7,6 +7,7 @@ import java.net.DatagramSocket;
 import java.net.InetSocketAddress;
 import java.net.SocketException;
 import java.util.LinkedHashMap;
+import java.util.Map;
 
 import es.um.redes.nanoFiles.application.NanoFiles;
 import es.um.redes.nanoFiles.udp.message.DirMessage;
@@ -281,6 +282,22 @@ public class NFDirectoryServer {
 			System.out.println("Directorio: Enviando lista de " + directoryFiles.length + " ficheros.");
 			break;
 		}
+		
+		// Para requestPeers
+		case DirMessageOps.OPERATION_REQUEST_PEERS: {
+			// Construir mensaje de respuesta con la lista de peers registrados
+			msgToSend = new DirMessage(DirMessageOps.OPERATION_PEERLIST);
+			// Recorremos solo los nicks (las claves)
+		    for (String nick : registeredPeers.keySet()) {
+		        // Añadimos el nick y buscamos su valor asociado (la IP/puerto)
+		        msgToSend.getPeerList().put(nick, registeredPeers.get(nick));
+		    }
+		    
+		    System.out.println("Directorio: Enviando lista de " + registeredPeers.size() + " peers.");
+		    break;
+		}
+		
+		
 		
 		default:
 			System.err.println("Unexpected message operation: \"" + operation + "\"");

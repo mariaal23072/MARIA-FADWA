@@ -1,7 +1,10 @@
 package es.um.redes.nanoFiles.udp.message;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+import java.net.InetSocketAddress;
 
 import es.um.redes.nanoFiles.application.NanoFiles;
 import es.um.redes.nanoFiles.util.FileInfo;
@@ -34,6 +37,8 @@ public class DirMessage {
 	// Para el mensaje de serve, se envían el nickname y el puerto del peer
 	private static final String FIELDNAME_NICKNAME = "nickname";
 	private static final String FIELDNAME_PORT = "port";
+	private static final String FIELDNAME_FILE = "file";
+	private static final String FIELDNAME_PEER = "peer"; // para requestPeers
 
 	
 
@@ -79,8 +84,14 @@ public class DirMessage {
 		return fileList;
 	}
 
+	// Para peers
+	private Map<String, InetSocketAddress> peerList = new LinkedHashMap<>(); // mapa de peers conocidos, para mensajes de requestPeers>
 
-
+	public Map<String, InetSocketAddress> getPeerList() {
+		return peerList;
+	}
+	
+	
 	public DirMessage(String op) {
 		operation = op;
 	}
@@ -177,7 +188,7 @@ public class DirMessage {
 			}
 			
 			// Para dirfile
-			case "file": {
+			case FIELDNAME_FILE: {
 				String[] partes = value.split("\\|"); // escapamos el delimitador "|" para separar los campos del fichero
 				if (partes.length == 3) {
 					String name = partes[0]; // nombre del fichero
@@ -185,6 +196,19 @@ public class DirMessage {
 					String hash = partes[2]; // hash del fichero
 					// Añadir dichero a la lista
 					m.getFileList().add(new FileInfo(hash, name, size, ""));
+				}
+				break;
+			}
+			
+			// Para peers
+			case FIELDNAME_PEER: {
+				String[] partes = value.split("\\|"); // escapamos el delimitador "|" para separar los campos del peer
+				if (partes.length == 3) {
+					String nickname = partes[0]; // nickname del peer
+					String host = partes[1]; // dirección IP del peer
+					int port = Integer.parseInt(partes[2]); // puerto del peer
+					// Añadir peer al mapa
+					m.getPeerList().put(nickname, new InetSocketAddress(host, port));
 				}
 				break;
 			}

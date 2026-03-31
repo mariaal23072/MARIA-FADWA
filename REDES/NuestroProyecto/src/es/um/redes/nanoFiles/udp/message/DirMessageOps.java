@@ -24,4 +24,9 @@ public class DirMessageOps {
 	// Para dirfile
 	public static final String OPERATION_REQUEST_DIRFILE = "requestDirfiles"; // valor que debe tomar el atributo 'operation' para hacer dirfile
 	public static final String OPERATION_DIRFILES = "dirfiles"; // valor que debe tomar el atributo 'operation' para enviar un mensaje dirfile con la lista de ficheros al cliente
+
+	// Para peers
+	public static final String OPERATION_REQUEST_PEERS = "requestPeers"; // valor que debe tomar el atributo 'operation' para hacer requestPeers
+	public static final String OPERATION_PEERLIST = "peers"; // valor que debe tomar el atributo 'operation' para enviar un mensaje peers con la lista de peers al cliente
+
 }
