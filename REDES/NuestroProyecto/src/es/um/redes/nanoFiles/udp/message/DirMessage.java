@@ -260,6 +260,18 @@ public class DirMessage {
 			}
             break;
 			
+        // para peers
+		case DirMessageOps.OPERATION_PEERLIST:
+			if (peerList != null && !peerList.isEmpty()) { // comprobamos que la lista de peers no esté vacía
+				 for (String nick : peerList.keySet()) { // iteramos sobre el mapa de peers, obteniendo el nickname y la dirección de cada peer
+			            InetSocketAddress addres = peerList.get(nick); // obtenemos la dirección del peer
+			            String ip = addres.getAddress().getHostAddress(); // obtenemos la dirección IP del peer
+			            int port = addres.getPort(); // obtenemos el puerto del peer
+			            
+			            sb.append("peer" + DELIMITER + nick + "|" + ip + "|" + port + END_LINE);
+			     }
+			}
+			break;
 			
 			
 		default:

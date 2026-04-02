@@ -16,6 +16,7 @@ public class NFController {
 	 * TODO: (Boletín Autómatas) Añadir más constantes que representen los estados
 	 * del autómata del cliente de directorio.
 	 */
+	private static final byte ONLINE = 1;
 
 	/**
 	 * Shell para leer comandos de usuario de la entrada estándar
@@ -213,14 +214,29 @@ public class NFController {
 		 */
 		boolean commandAllowed = true;
 		switch (currentCommand) {
-		case NFCommands.COM_MYFILES: {
-			commandAllowed = true;
+		case NFCommands.COM_MYFILES:
+		case NFCommands.COM_PING:
+		case NFCommands.COM_HELP:
+		case NFCommands.COM_QUIT:
+		case NFCommands.COM_NICK:
+			commandAllowed = true; 
 			break;
+			
+		case NFCommands.COM_FILELIST_DIR:
+		case NFCommands.COM_PEERLIST:
+		case NFCommands.COM_FILELIST_PEER:
+		case NFCommands.COM_SERVE:
+		case NFCommands.COM_DOWNLOAD_DIR:
+		case NFCommands.COM_DOWNLOAD_PEER: {
+			if (currentState == OFFLINE) {
+				commandAllowed = false;
+				System.err.println("* You must be online to use this command. Use 'ping' first.");
+			}
+			break; 
 		}
 		default:
-			// System.err.println("ERROR: undefined behaviour for " + currentCommand + "
-			// command!");
-		}
+			System.err.println("ERROR: undefined behaviour for " + currentCommand + " command!");
+	}
 		return commandAllowed;
 	}
 
@@ -234,6 +250,9 @@ public class NFController {
 			return;
 		}
 		switch (currentCommand) {
+		case NFCommands.COM_PING:
+			currentState = ONLINE; // Si el ping ha sido exitoso, pasamos a estado ONLINE
+			break;
 		default:
 		}
 
