@@ -11,6 +11,35 @@ que no empeore en más de un 30% la solución óptima.
 Encontrar la mejor solución en cada momento sin dar marcha atrás.
 Nº max de alumnos: 100
 
+EJEMPLO PARA VER LAS MATRICES
+1. Analizando la matriz de Amistad:
+(Columnas: Alumno 0, Alumno 1, Alumno 2)
+0 5 6  -> Fila del Alumno 0: Siente un 5 por el alumno 1, y un 6 por el alumno 2.
+4 0 3  -> Fila del Alumno 1: Siente un 4 por el alumno 0, y un 3 por el alumno 2.
+2 1 0  -> Fila del Alumno 2: Siente un 2 por el alumno 0, y un 1 por el alumno 1.
+2. Analizando la matriz de Trabajo (compenetración):
+(Columnas: Alumno 0, Alumno 1, Alumno 2)
+0 5 3  -> Fila del Alumno 0: Trabaja de nivel 5 con el alumno 1, y nivel 3 con el alumno 2.
+3 0 2  -> Fila del Alumno 1: Trabaja de nivel 3 con el alumno 0, y nivel 2 con el alumno 2.
+1 5 0  -> Fila del Alumno 2: Trabaja de nivel 1 con el alumno 0, y nivel 5 con el alumno 1.
+
+Pareja <0, 1>:
+Amistad mutua: (5 + 4 = 9)
+Trabajo mutuo:  (5 + 3 = 8)
+Beneficio: 9 * 8 = 72
+
+Pareja <0, 2>:
+Amistad mutua: (6 + 2 = 8)
+Trabajo mutuo: (3 + 1 = 4)
+Beneficio: 8 * 4 = 32
+
+Pareja <1, 2>:
+Amistad mutua: (3 + 1 = 4)
+Trabajo mutuo: (2 + 5 = 7)
+Beneficio: 4 * 7 = 28
+
+
+
 
 
 PROBLEMA L_Ba:
