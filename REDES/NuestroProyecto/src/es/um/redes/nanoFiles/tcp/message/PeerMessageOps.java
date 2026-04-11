@@ -12,9 +12,13 @@ public class PeerMessageOps {
 	 * los diferentes tipos de mensajes del protocolo de comunicación con un par
 	 * servidor de ficheros (valores posibles del campo "operation").
 	 */
-
-
-
+	public static final byte OPCODE_REQUEST_PEER_FILES = 1;
+	public static final byte OPCODE_PEER_FILE = 2;
+	public static final byte OPCODE_PEER_FILES_ERROR = 3;
+	
+	public static final byte OPCODE_DOWNLOAD = 6;
+	public static final byte OPCODE_DOWNLOAD_REP = 5;
+	public static final byte OPCODE_FILE_NOT_FOUND = 4;
 
 	/*
 	 * TODO: (Boletín MensajesBinarios) Definir constantes con nuevos opcodes de
@@ -22,14 +26,11 @@ public class PeerMessageOps {
 	 * su representación textual a "valid_operations_str" EN EL MISMO ORDEN.
 	 */
 	private static final Byte[] _valid_opcodes = { OPCODE_INVALID_CODE,
-
-
-
+			OPCODE_REQUEST_PEER_FILES, OPCODE_PEER_FILE, OPCODE_PEER_FILES_ERROR, OPCODE_FILE_NOT_FOUND, OPCODE_DOWNLOAD_REP, OPCODE_DOWNLOAD
 	};
+	
 	private static final String[] _valid_operations_str = { "INVALID_OPCODE",
-
-
-
+			"REQUEST_PEER_FILES", "PEER_FILE", "PEER_FILES_ERROR" , "FILE_NOT_FOUND", "DOWNLOAD_REP", "DOWNLOAD"
 	};
 
 	private static Map<String, Byte> _operation_to_opcode;
