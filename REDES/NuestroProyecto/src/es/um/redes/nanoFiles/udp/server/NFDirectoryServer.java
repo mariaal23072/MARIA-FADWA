@@ -262,12 +262,16 @@ public class NFDirectoryServer {
 			// Obtener IP del cliente por el datagrama y juntarla con el puerto TCP
 			InetSocketAddress peerAddress = new InetSocketAddress(pkt.getAddress(), port);
 			
-			// Registrar el peer en los datos del servidor
-			registeredPeers.put(nickname, peerAddress);
-			System.out.println("Directorio: Peer registrado: " + nickname + " escuchando en " + peerAddress);
-			
-			// Construir mensaje de respuesta
-			msgToSend = new DirMessage(DirMessageOps.OPERATION_SERVE_OK);
+			// Comprobar si el nick ya existe en el directorio, si no, registrarlo junto con su dirección IP/puerto TCP. 
+			// Enviar mensaje de respuesta indicando éxito o fracaso de la operación.
+			if (registeredPeers.containsKey(nickname)) {
+				System.err.println("Directorio: Denegado. Peer '" + nickname + "' ya está en uso.");
+				msgToSend = new DirMessage(DirMessageOps.OPERATION_SERVE_MAL); 
+			} else {
+				registeredPeers.put(nickname, peerAddress);
+				System.out.println("Directorio: Peer registrado: " + nickname + " escuchando en " + peerAddress);
+				msgToSend = new DirMessage(DirMessageOps.OPERATION_SERVE_OK);
+			}
 			break;
 			
 		}

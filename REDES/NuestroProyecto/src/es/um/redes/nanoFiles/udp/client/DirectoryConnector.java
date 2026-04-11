@@ -352,12 +352,14 @@ public class DirectoryConnector {
 			// 5.
 			DirMessage responseMessage = DirMessage.fromString(responseString);
 
-			// 6. Comprobar si la operación de la respuesta es OPERATION_SERVE_OK
+			// 6. Comprobar la respuesta del directorio
 			if (responseMessage.getOperation().equals(DirMessageOps.OPERATION_SERVE_OK)) {
 				success = true;
+			} else if (responseMessage.getOperation().equals(DirMessageOps.OPERATION_SERVE_MAL)) {
+				System.err.println("Error: El nickname '" + NanoFiles.peerNickname + "' ya está en uso.");
+				success = false;
 			} else {
-				System.err.println("Error: Registro Falló. Se esperaba la operación: " + DirMessageOps.OPERATION_SERVE_OK
-						+ ". Pero se recibió: " + responseMessage.getOperation());
+				System.err.println("Error inesperado del servidor: " + responseMessage.getOperation());
 				success = false;
 			}
 		}
