@@ -1,4 +1,5 @@
 #include <iostream>
+#include <algorithm>
 using namespace std;
 
 const int MAX_ALUMNOS = 100;
@@ -10,12 +11,20 @@ struct Pupitre {
     int beneficio;
 };
 
+
+
+Pupitre pupitre[MAX_PAREJAS];
+
+// Para ordenar de mayor a menor beneficio
+bool compararParejas(Pupitre a, Pupitre b) {
+    return a.beneficio > b.beneficio;
+}
+
 int organizacionClase(int N, int amistad[MAX_ALUMNOS][MAX_ALUMNOS], int trabajo[MAX_ALUMNOS][MAX_ALUMNOS], int solucion[MAX_ALUMNOS]) {
     
     int beneficio_total = 0;
     int pareja = 0;
     bool emparejado[MAX_ALUMNOS] = {};
-    Pupitre pupitre[MAX_PAREJAS];
 
     for (int i = 0; i < N; i++) {
         for (int j = i+1; j < N; j++) { // i+1 para no generar parejas repetidas
@@ -28,16 +37,8 @@ int organizacionClase(int N, int amistad[MAX_ALUMNOS][MAX_ALUMNOS], int trabajo[
         }
     }
 
-    // Ordenar parejas por beneficio de mayor a menor
-    for (int i = 0; i < pareja - 1; i++) {
-        for (int j = 0; j < pareja - i - 1; j++) {
-            if (pupitre[j].beneficio < pupitre[j+1].beneficio) {
-                Pupitre temp = pupitre[j];
-                pupitre[j] = pupitre[j+1];
-                pupitre[j+1] = temp;
-            }
-        }
-    }
+    // Ordenar solo desde el inicio hasta el nº de parejas generado
+    sort(pupitre, pupitre + pareja, compararParejas);
 
     int indice = 0;
     // elegir parejas válidas dentro de las ordenadas
@@ -46,11 +47,12 @@ int organizacionClase(int N, int amistad[MAX_ALUMNOS][MAX_ALUMNOS], int trabajo[
             emparejado[pupitre[k].alum1] = true;
             emparejado[pupitre[k].alum2] = true;
             beneficio_total = beneficio_total + pupitre[k].beneficio;
-            
+
             solucion[indice] = pupitre[k].alum1;
             indice++;
             solucion[indice] = pupitre[k].alum2;
             indice++;
+            
         }
     }
 
@@ -62,9 +64,6 @@ int organizacionClase(int N, int amistad[MAX_ALUMNOS][MAX_ALUMNOS], int trabajo[
             }
         }
     }
-
-
-
 
     return beneficio_total;
 }
