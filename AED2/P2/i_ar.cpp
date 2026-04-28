@@ -11,8 +11,6 @@ struct Pupitre {
     int beneficio;
 };
 
-
-
 Pupitre pupitre[MAX_PAREJAS];
 
 // Para ordenar de mayor a menor beneficio
@@ -67,6 +65,14 @@ int organizacionClase(int N, int amistad[MAX_ALUMNOS][MAX_ALUMNOS], int trabajo[
 
     return beneficio_total;
 }
+
+
+
+
+
+
+
+
 
 int main () {
 

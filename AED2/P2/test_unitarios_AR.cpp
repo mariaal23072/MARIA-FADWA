@@ -4,13 +4,26 @@
 
 using namespace std;
 
+int amistad[MAX_ALUMNOS][MAX_ALUMNOS] = {};
+int trabajo[MAX_ALUMNOS][MAX_ALUMNOS] = {};
+int solucion[MAX_ALUMNOS] = {};
+
+// Funcion para borrrar (porq hemos declarado las matrices globales) y así no tener que reiniciar el programa cada vez
+void limpiarMatrices(int N) {
+    for (int i = 0; i < N; i++) {
+        for (int j = 0; j < N; j++) {
+            amistad[i][j] = 0;
+            trabajo[i][j] = 0;
+        }
+        solucion[i] = 0;
+    }
+}
+
 // ejemplo del enunciado
 void testEjemploEnunciado() {
     int N = 3;
-    int amistad[MAX_ALUMNOS][MAX_ALUMNOS] = {};
-    int trabajo[MAX_ALUMNOS][MAX_ALUMNOS] = {};
-    int solucion[MAX_ALUMNOS] = {};
-
+    limpiarMatrices(N);
+ 
     // Llenar matriz amistad del ejemplo (sin diagonal)
     amistad [0] [1] = 5; 
     amistad [0] [2] = 6; 
@@ -36,9 +49,7 @@ void testEjemploEnunciado() {
 // todos se llevan bien, pero no trabajan (beneficio = 0)
 void testSinCompenetracion() {
     int N = 2;
-    int amistad[MAX_ALUMNOS][MAX_ALUMNOS] = {0};
-    int trabajo[MAX_ALUMNOS][MAX_ALUMNOS] = {0};
-    int solucion[MAX_ALUMNOS] = {0};
+    limpiarMatrices(N);
 
     // Máxima amistad
     amistad[0][1] = 9; 
@@ -52,9 +63,7 @@ void testSinCompenetracion() {
 // número impar donde sobra 1 alumno y no hay parejas (N = 1)
 void testUnSoloAlumno() {
     int N = 1;
-    int amistad[MAX_ALUMNOS][MAX_ALUMNOS] = {0};
-    int trabajo[MAX_ALUMNOS][MAX_ALUMNOS] = {0};
-    int solucion[MAX_ALUMNOS] = {0};
+    limpiarMatrices(N);
 
     int beneficio = organizacionClase(N, amistad, trabajo, solucion);
     
